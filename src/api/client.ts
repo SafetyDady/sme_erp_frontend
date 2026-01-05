@@ -46,6 +46,8 @@ class ApiClient {
         // If response is not JSON, use status text
         errorMessage = response.statusText || errorMessage;
       }
+      const requestId = response.headers.get("x-request-id");
+      console.error(`API Error (Request ID: ${requestId || "unknown"}):`, errorMessage);
       throw new ApiError(response.status, errorMessage);
     }
 
