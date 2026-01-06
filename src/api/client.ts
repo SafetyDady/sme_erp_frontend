@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8001/api/v1";
+const API_BASE_URL = "http://localhost:8002/api/v1";
 
 class ApiError extends Error {
   constructor(public status: number, message: string) {
@@ -55,7 +55,36 @@ class ApiClient {
     }
 
     console.log(`API Success: ${response.status} ${response.statusText}`);
-    return response.json();
+
+    // Handle different response types
+    const contentType = response.headers.get("content-type");
+    const contentLength = response.headers.get("content-length");
+
+    // If content-length is 0 or content-type indicates no content, return empty response
+    if (contentLength === "0" || response.status === 204) {
+      return {} as T;
+    }
+
+    // If content-type indicates JSON, try to parse JSON
+    if (contentType?.includes("application/json")) {
+      try {
+        return await response.json();
+      } catch (e) {
+        console.warn(
+          "Failed to parse JSON response, returning empty object:",
+          e
+        );
+        return {} as T;
+      }
+    }
+
+    // For other content types or when in doubt, try to parse as JSON but handle errors gracefully
+    try {
+      return await response.json();
+    } catch (e) {
+      console.warn("Response not JSON or empty, returning empty object");
+      return {} as T;
+    }
   }
 
   // Auth
@@ -250,7 +279,7 @@ class ApiClient {
   }
 
   async disableUser(userId: number) {
-    return this.request(`/users/users/${userId}`, {
+    return this.request<{ message: string }>(`/users/users/${userId}`, {
       method: "DELETE",
     });
   }
