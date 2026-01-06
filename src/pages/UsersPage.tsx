@@ -264,7 +264,7 @@ export const UsersPage: React.FC = () => {
                           <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                             {new Date(user.created_at).toLocaleDateString()}
                           </td>
-                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4">
+                          <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium space-x-4 flex justify-end">
                             <Button
                               variant="secondary"
                               size="sm"
@@ -277,6 +277,15 @@ export const UsersPage: React.FC = () => {
                               variant={user.is_active ? "danger" : "primary"}
                               size="sm"
                               onClick={() => handleDisableUser(user)}
+                              style={
+                                user.is_active
+                                  ? {
+                                      backgroundColor: "#dc2626",
+                                      color: "#ffffff",
+                                      fontWeight: "600",
+                                    }
+                                  : {}
+                              }
                               className="font-medium"
                             >
                               {user.is_active ? "Disable" : "Enable"}

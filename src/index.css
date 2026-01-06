@@ -218,6 +218,12 @@ code {
 .bg-red-50 {
   background-color: #fef2f2;
 }
+.bg-red-600 {
+  background-color: #dc2626;
+}
+.hover\:bg-red-700:hover {
+  background-color: #b91c1c;
+}
 .bg-purple-50 {
   background-color: #faf5ff;
 }
