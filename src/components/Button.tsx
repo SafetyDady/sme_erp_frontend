@@ -1,8 +1,11 @@
 import React from "react";
 
+type ButtonVariant = "primary" | "secondary" | "tertiary" | "danger";
+type ButtonSize = "sm" | "md" | "lg";
+
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-  variant?: "primary" | "secondary" | "danger";
-  size?: "sm" | "md" | "lg";
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   isLoading?: boolean;
   children: React.ReactNode;
 }
@@ -13,35 +16,30 @@ export const Button: React.FC<ButtonProps> = ({
   isLoading = false,
   children,
   disabled,
-  className,
+  className = "",
   ...props
 }) => {
   const baseClasses =
-    "font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2";
+    "font-medium rounded-md transition-colors focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:opacity-50 disabled:cursor-not-allowed";
 
-  const variantClasses = {
-    primary: "bg-blue-600 text-white hover:bg-blue-700 focus:ring-blue-500",
+  const variantClasses: Record<ButtonVariant, string> = {
+    primary: "bg-primary text-white hover:bg-primary-600 focus:ring-primary",
     secondary:
-      "bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-gray-500",
-    danger:
-      "bg-red-600 text-white hover:bg-red-700 focus:ring-red-500 font-semibold",
+      "bg-white text-primary border border-primary hover:bg-primary-50 focus:ring-primary",
+    tertiary:
+      "bg-transparent text-primary hover:bg-primary-50 focus:ring-primary",
+    danger: "bg-danger text-white hover:bg-red-600 focus:ring-danger",
   };
 
-  const sizeClasses = {
-    sm: "px-3 py-1 text-sm",
+  const sizeClasses: Record<ButtonSize, string> = {
+    sm: "px-3 py-1.5 text-sm",
     md: "px-4 py-2 text-base",
     lg: "px-6 py-3 text-lg",
   };
 
-  const combinedClassName = `${baseClasses} ${variantClasses[variant]} ${
-    sizeClasses[size]
-  } ${isLoading || disabled ? "opacity-50 cursor-not-allowed" : ""} ${
-    className || ""
-  }`.trim();
-
   return (
     <button
-      className={combinedClassName}
+      className={`${baseClasses} ${variantClasses[variant]} ${sizeClasses[size]} ${className}`}
       disabled={isLoading || disabled}
       {...props}
     >

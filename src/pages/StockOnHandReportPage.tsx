@@ -8,7 +8,7 @@ interface StockOnHandItem {
   location_id: number;
   location_name: string;
   current_quantity: string | number;
-  last_transaction_date: string;
+  last_updated: string;
 }
 
 interface Location {
@@ -94,7 +94,7 @@ export const StockOnHandReportPage: React.FC = () => {
           `"${item.item_name}"`,
           `"${item.location_name}"`,
           (Number(item.current_quantity) || 0).toFixed(2),
-          `"${new Date(item.last_transaction_date).toISOString()}"`,
+          `"${new Date(item.last_updated).toISOString()}"`,
         ].join(",")
       ),
     ];
@@ -268,7 +268,7 @@ export const StockOnHandReportPage: React.FC = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(item.last_transaction_date).toLocaleString()}
+                        {new Date(item.last_updated).toLocaleString()}
                       </td>
                     </tr>
                   ))}

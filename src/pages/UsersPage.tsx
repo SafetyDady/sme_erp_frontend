@@ -114,7 +114,7 @@ export const UsersPage: React.FC = () => {
       console.error(`Failed to ${action} user:`, error);
       const errorMsg =
         error?.message || error?.detail || "Unknown error occurred";
-      alert(`Failed to ${action} user: ${errorMsg}`);
+      window.alert(`Failed to ${action} user: ${errorMsg}`);
     }
   };
 
