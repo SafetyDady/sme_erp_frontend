@@ -203,10 +203,10 @@ export const MovementReportPage: React.FC = () => {
   const totalTransactions = data.length;
   const totalIn = data
     .filter((d) => d.transaction_type === "IN")
-    .reduce((sum, d) => sum + d.quantity, 0);
+    .reduce((sum, d) => sum + (Number(d.quantity) || 0), 0);
   const totalOut = data
     .filter((d) => d.transaction_type === "OUT")
-    .reduce((sum, d) => sum + Math.abs(d.quantity), 0);
+    .reduce((sum, d) => sum + Math.abs(Number(d.quantity) || 0), 0);
 
   return (
     <Layout>
@@ -236,13 +236,13 @@ export const MovementReportPage: React.FC = () => {
           <div className="bg-white shadow rounded-lg p-4">
             <dt className="text-sm font-medium text-gray-500">Total IN</dt>
             <dd className="mt-1 text-3xl font-semibold text-green-600">
-              +{totalIn.toFixed(2)}
+              +{(totalIn || 0).toFixed(2)}
             </dd>
           </div>
           <div className="bg-white shadow rounded-lg p-4">
             <dt className="text-sm font-medium text-gray-500">Total OUT</dt>
             <dd className="mt-1 text-3xl font-semibold text-red-600">
-              -{totalOut.toFixed(2)}
+              -{(totalOut || 0).toFixed(2)}
             </dd>
           </div>
         </div>
@@ -409,18 +409,18 @@ export const MovementReportPage: React.FC = () => {
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div
                           className={`text-sm font-medium ${
-                            entry.quantity > 0
+                            (Number(entry.quantity) || 0) > 0
                               ? "text-green-600"
                               : "text-red-600"
                           }`}
                         >
-                          {entry.quantity > 0 ? "+" : ""}
-                          {entry.quantity}
+                          {(Number(entry.quantity) || 0) > 0 ? "+" : ""}
+                          {(Number(entry.quantity) || 0).toFixed(2)}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          {entry.running_balance}
+                          {(Number(entry.running_balance) || 0).toFixed(2)}
                         </div>
                       </td>
                       <td className="px-6 py-4">

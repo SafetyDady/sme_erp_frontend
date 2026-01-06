@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { apiClient } from "../api/client";
 import { useAuth } from "../auth/AuthContext";
 import { Layout } from "../components/Layout";
@@ -92,33 +93,33 @@ export const DashboardPage: React.FC = () => {
             Quick Actions
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <a
-              href="/items/new"
+            <Link
+              to="/items/new"
               className="block p-4 bg-blue-50 border border-blue-200 rounded-lg hover:bg-blue-100 transition-colors"
             >
               <h4 className="font-medium text-blue-900">Add New Item</h4>
               <p className="text-sm text-blue-600 mt-1">
                 Create a new inventory item
               </p>
-            </a>
-            <a
-              href="/transactions/new"
+            </Link>
+            <Link
+              to="/transactions/new"
               className="block p-4 bg-green-50 border border-green-200 rounded-lg hover:bg-green-100 transition-colors"
             >
               <h4 className="font-medium text-green-900">Record Transaction</h4>
               <p className="text-sm text-green-600 mt-1">
                 Stock IN/OUT or transfer
               </p>
-            </a>
-            <a
-              href="/reports"
+            </Link>
+            <Link
+              to="/reports"
               className="block p-4 bg-purple-50 border border-purple-200 rounded-lg hover:bg-purple-100 transition-colors"
             >
               <h4 className="font-medium text-purple-900">View Reports</h4>
               <p className="text-sm text-purple-600 mt-1">
                 Inventory and movement reports
               </p>
-            </a>
+            </Link>
           </div>
         </div>
       </div>

@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 import { apiClient } from "../api/client";
 
 interface User {
@@ -23,7 +23,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   children,
 }) => {
   const [user, setUser] = useState<User | null>(null);
-  const [token, setToken] = useState<string | null>(null);
+  const [token, setToken] = useState<string | null>(
+    localStorage.getItem("token")
+  );
   const [loading, setLoading] = useState(false);
 
   const fetchUser = async () => {
@@ -45,6 +47,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const newToken = response.access_token;
 
       setToken(newToken);
+      localStorage.setItem("token", newToken);
       apiClient.setToken(newToken);
 
       await fetchUser();
@@ -59,8 +62,17 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
   const logout = () => {
     setUser(null);
     setToken(null);
+    localStorage.removeItem("token");
     apiClient.clearToken();
   };
+
+  // Initialize user on app load if token exists
+  useEffect(() => {
+    if (token) {
+      apiClient.setToken(token);
+      fetchUser();
+    }
+  }, []);
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout, loading }}>

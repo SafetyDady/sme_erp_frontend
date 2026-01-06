@@ -7,8 +7,8 @@ interface StockOnHandItem {
   item_name: string;
   location_id: number;
   location_name: string;
-  current_quantity: number;
-  last_updated: string;
+  current_quantity: string | number;
+  last_transaction_date: string;
 }
 
 interface Location {
@@ -93,8 +93,8 @@ export const StockOnHandReportPage: React.FC = () => {
         [
           `"${item.item_name}"`,
           `"${item.location_name}"`,
-          item.current_quantity,
-          `"${new Date(item.last_updated).toISOString()}"`,
+          (Number(item.current_quantity) || 0).toFixed(2),
+          `"${new Date(item.last_transaction_date).toISOString()}"`,
         ].join(",")
       ),
     ];
@@ -117,7 +117,7 @@ export const StockOnHandReportPage: React.FC = () => {
   };
 
   const totalQuantity = data.reduce(
-    (sum, item) => sum + item.current_quantity,
+    (sum, item) => sum + (Number(item.current_quantity) || 0),
     0
   );
   const uniqueItems = new Set(data.map((item) => item.item_id)).size;
@@ -264,11 +264,11 @@ export const StockOnHandReportPage: React.FC = () => {
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm text-gray-900">
-                          {item.current_quantity.toFixed(2)}
+                          {(Number(item.current_quantity) || 0).toFixed(2)}
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                        {new Date(item.last_updated).toLocaleString()}
+                        {new Date(item.last_transaction_date).toLocaleString()}
                       </td>
                     </tr>
                   ))}

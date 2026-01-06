@@ -1,4 +1,4 @@
-const API_BASE_URL = "http://localhost:8000/api/v1";
+const API_BASE_URL = "http://localhost:8001/api/v1";
 
 class ApiError extends Error {
   constructor(public status: number, message: string) {
@@ -47,16 +47,20 @@ class ApiClient {
         errorMessage = response.statusText || errorMessage;
       }
       const requestId = response.headers.get("x-request-id");
-      console.error(`API Error (Request ID: ${requestId || "unknown"}):`, errorMessage);
+      console.error(
+        `API Error (Request ID: ${requestId || "unknown"}):`,
+        `Status: ${response.status}, Message: ${errorMessage}`
+      );
       throw new ApiError(response.status, errorMessage);
     }
 
+    console.log(`API Success: ${response.status} ${response.statusText}`);
     return response.json();
   }
 
   // Auth
   async login(username: string, password: string) {
-    const formData = new FormData();
+    const formData = new URLSearchParams();
     formData.append("username", username);
     formData.append("password", password);
 
@@ -64,7 +68,9 @@ class ApiClient {
       "/auth/login",
       {
         method: "POST",
-        headers: {},
+        headers: {
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
         body: formData,
       }
     );
@@ -202,6 +208,51 @@ class ApiClient {
         created_at: string;
       }>
     >("/users/users");
+  }
+
+  async createUser(userData: {
+    email: string;
+    password: string;
+    role: string;
+  }) {
+    return this.request<{
+      id: number;
+      email: string;
+      role: string;
+      is_active: boolean;
+      created_at: string;
+    }>("/users/users", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+    });
+  }
+
+  async updateUser(
+    userId: number,
+    userData: {
+      email?: string;
+      role?: string;
+      is_active?: boolean;
+    }
+  ) {
+    return this.request<{
+      id: number;
+      email: string;
+      role: string;
+      is_active: boolean;
+      created_at: string;
+    }>(`/users/users/${userId}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(userData),
+    });
+  }
+
+  async disableUser(userId: number) {
+    return this.request(`/users/users/${userId}`, {
+      method: "DELETE",
+    });
   }
 
   async getRoles() {
