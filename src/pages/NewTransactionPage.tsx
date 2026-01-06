@@ -83,7 +83,6 @@ export const NewTransactionPage: React.FC = () => {
         notes: notes.trim() || "",
       };
 
-
       switch (transactionType) {
         case "IN":
           await apiClient.stockIn({
@@ -209,56 +208,54 @@ export const NewTransactionPage: React.FC = () => {
         </h1>
 
         {/* Transaction Type Selection */}
-        <div className="bg-white shadow rounded-lg p-6 mb-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">
+        <div className="bg-white shadow rounded-lg p-4 mb-4">
+          <h2 className="text-lg font-semibold text-gray-900 mb-3">
             Transaction Type
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+          <div className="flex flex-row justify-between gap-2">
             <button
               onClick={() => handleTransactionTypeChange("IN")}
-              className={`p-4 border rounded-lg text-center transition-colors ${
+              className={`flex-1 py-2 px-1 border rounded text-center transition-colors ${
                 transactionType === "IN"
                   ? "border-green-500 bg-green-50 text-green-700"
                   : "border-gray-200 hover:border-green-300"
               }`}
             >
-              <div className="text-2xl mb-1">⬆️</div>
-              <div className="font-medium">Stock IN</div>
-              <div className="text-xs text-gray-600">Receive inventory</div>
+              <div className="text-lg mb-1">⬆️</div>
+              <div className="font-medium text-sm">Stock IN</div>
+              <div className="text-xs text-gray-600">Receive</div>
             </button>
 
             <button
               onClick={() => handleTransactionTypeChange("OUT")}
-              className={`p-4 border rounded-lg text-center transition-colors ${
+              className={`flex-1 py-2 px-1 border rounded text-center transition-colors ${
                 transactionType === "OUT"
                   ? "border-red-500 bg-red-50 text-red-700"
                   : "border-gray-200 hover:border-red-300"
               }`}
             >
-              <div className="text-2xl mb-1">⬇️</div>
-              <div className="font-medium">Stock OUT</div>
-              <div className="text-xs text-gray-600">Issue inventory</div>
+              <div className="text-lg mb-1">⬇️</div>
+              <div className="font-medium text-sm">Stock OUT</div>
+              <div className="text-xs text-gray-600">Issue</div>
             </button>
 
             <button
               onClick={() => handleTransactionTypeChange("TRANSFER")}
-              className={`p-4 border rounded-lg text-center transition-colors ${
+              className={`flex-1 py-2 px-1 border rounded text-center transition-colors ${
                 transactionType === "TRANSFER"
                   ? "border-blue-500 bg-blue-50 text-blue-700"
                   : "border-gray-200 hover:border-blue-300"
               }`}
             >
-              <div className="text-2xl mb-1">🔄</div>
-              <div className="font-medium">Transfer</div>
-              <div className="text-xs text-gray-600">
-                Move between locations
-              </div>
+              <div className="text-lg mb-1">🔄</div>
+              <div className="font-medium text-sm">Transfer</div>
+              <div className="text-xs text-gray-600">Move</div>
             </button>
 
             <button
               onClick={() => handleTransactionTypeChange("ADJUSTMENT")}
               disabled={!canAdjust}
-              className={`p-4 border rounded-lg text-center transition-colors ${
+              className={`flex-1 py-2 px-1 border rounded text-center transition-colors ${
                 !canAdjust
                   ? "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed"
                   : transactionType === "ADJUSTMENT"
@@ -266,10 +263,10 @@ export const NewTransactionPage: React.FC = () => {
                   : "border-gray-200 hover:border-purple-300"
               }`}
             >
-              <div className="text-2xl mb-1">⚖️</div>
-              <div className="font-medium">Adjustment</div>
+              <div className="text-lg mb-1">⚖️</div>
+              <div className="font-medium text-sm">Adjustment</div>
               <div className="text-xs text-gray-600">
-                {canAdjust ? "Admin only" : "Admin required"}
+                {canAdjust ? "Admin" : "Admin req"}
               </div>
             </button>
           </div>
