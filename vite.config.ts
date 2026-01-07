@@ -6,6 +6,7 @@ export default defineConfig({
   server: {
     host: "0.0.0.0", // Bind to all interfaces for dev container
     port: 3000,
+    allowedHosts: ["localhost", "127.0.0.1", ".manus.computer"],
     proxy: {
       "/api": {
         target: "http://localhost:8000",

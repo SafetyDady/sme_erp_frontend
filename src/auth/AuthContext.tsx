@@ -30,6 +30,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
 
   const fetchUser = async () => {
     try {
+      setLoading(true);
       const userData = await apiClient.getMe();
       setUser(userData);
     } catch (error) {
@@ -46,11 +47,14 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       const response = await apiClient.login(username, password);
       const newToken = response.access_token;
 
+      // Set token in apiClient FIRST before calling fetchUser
+      apiClient.setToken(newToken);
       setToken(newToken);
       localStorage.setItem("token", newToken);
-      apiClient.setToken(newToken);
 
-      await fetchUser();
+      // Now fetch user with token set
+      const userData = await apiClient.getMe();
+      setUser(userData);
     } catch (error) {
       console.error("Login failed:", error);
       throw error;
@@ -72,7 +76,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({
       apiClient.setToken(token);
       fetchUser();
     }
-  }, []);
+  }, [token]);
 
   return (
     <AuthContext.Provider value={{ user, token, login, logout, loading }}>
